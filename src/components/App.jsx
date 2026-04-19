@@ -8,6 +8,7 @@ import createPokemonDeck from "../hooks/createPokemonDeck";
 import Background from "./Background";
 import Logo from "./Logo";
 import Header from "./Header";
+import Loader from "./Loading";
 
 export default function App() {
     const [deckSize, setDeckSize] = useState(0);
@@ -61,7 +62,7 @@ export default function App() {
                     <DifficultySelector onSelectDifficulty={handleSelectDifficulty} /> </div>
             )}
 
-            {loading && screen !== SCREENS.DEFAULT && <p className="loading">Loading...</p>}
+            {loading && screen !== SCREENS.DEFAULT && <Loader />}
 
             {screen === SCREENS.PLAYING && !loading && (
                 <div className="game-page">
@@ -71,6 +72,7 @@ export default function App() {
                             best={bestScore}
                             total={deckSize}
                         />
+                        onClick={restartGame}
                     />
                     <Deck
                         cards={deck}
@@ -83,6 +85,7 @@ export default function App() {
             {screen === SCREENS.DEFEAT && (
                 <EndScreen
                     message="Game Over!"
+                    score={currentScore}
                     onRestart={restartGame}
                 />
             )}
@@ -90,6 +93,7 @@ export default function App() {
             {screen === SCREENS.VICTORY && (
                 <EndScreen
                     message="You Win!"
+                    score={currentScore}
                     onRestart={restartGame}
                 />
             )}

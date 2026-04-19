@@ -1,4 +1,4 @@
-import backgroundVideo from '../../public/pokemon-gif.mp4';
+import backgroundVideo from '../assets/pokemon-gif.mp4';
 
 export default function Background() {
     return (
