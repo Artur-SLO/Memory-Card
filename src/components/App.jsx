@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import DifficultySelector from "./DifficultySelector";
 import Deck from "./Deck";
 import Score from "./Score"
@@ -20,12 +20,29 @@ export default function App() {
     const [screen, setScreen] = useState(SCREENS.DEFAULT);
     const [reloadDeck, setReloadDeck] = useState(false);
     const [state, setState] = useState(STATE.DEFAULT);
-    const [audio, setAudio] = useState(true);
+    const [showHint, setShowHint] = useState(false);
 
-    // Refs
+    // Refs / Music States
+    const [audio, setAudio] = useState(true);
+    const [music, setMusic] = useState(false);
     const victoryAudioRef = useRef(new Audio(AUDIOS.VICTORY));
     const defeatAudioRef = useRef(new Audio(AUDIOS.DEFEAT));
     const flipAudioRef = useRef(new Audio(AUDIOS.FLIP));
+    const bgMusicRef = useRef(new Audio(AUDIOS.BG));
+
+    useEffect(() => {
+        const bg = bgMusicRef.current;
+        bg.loop = true;
+        bg.volume = 0.3;
+
+        if (music) {
+            bg.play()
+        } else {
+            bg.pause();
+        }
+
+        return () => bg.pause();
+    }, [music]);
 
     // API call
     const { deck, loading } = createPokemonDeck(deckSize, reloadDeck);
@@ -74,6 +91,7 @@ export default function App() {
         if (!audio) return;
 
         audioRef.current.currentTime = 0;
+        audioRef.current.volume = 0.3;
         audioRef.current.play();
     }
 
@@ -82,6 +100,14 @@ export default function App() {
             ref.current.pause();
             ref.current.currentTime = 0;
         });
+    }
+
+    function toggleAudio() {
+        setAudio(prev => !prev);
+    }
+
+    function toggleMusic() {
+        setMusic(prev => !prev);
     }
 
     // App
@@ -94,7 +120,8 @@ export default function App() {
                         <Logo sizeClass="big-logo"/>
                         <h1 className="start-text">Memory Game</h1>
                     </div>
-                    <DifficultySelector onSelectDifficulty={handleSelectDifficulty} /> </div>
+                    <DifficultySelector onSelectDifficulty={handleSelectDifficulty} />
+                </div>
             )}
 
             {loading && screen !== SCREENS.DEFAULT && <Loader />}
@@ -137,7 +164,12 @@ export default function App() {
                     onRestart={restartGame}
                 />
             )}
-            <Footer setAudio={() => {setAudio(prev => !prev)}}/>
+            <Footer 
+                isAudioEnabled={audio}
+                isBgMusicEnabled={music}
+                setAudio={toggleAudio}
+                setMusic={toggleMusic}
+            />
         </>
     );
 }

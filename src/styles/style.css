@@ -27,6 +27,12 @@ body {
     font-family: 'Pokemon Solid', sans-serif;
 }
 
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 /* Background video */
 .background-video {
     object-fit: cover;
@@ -107,7 +113,6 @@ body {
     justify-content: center;
     color: var(--title-font-color);
 }
-
 
 /* Game setup */
 .loading {
@@ -245,9 +250,39 @@ body {
 
 }
 
+/* Footer */
+.footer-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: var(--padding-size);
+    padding-right: var(--padding-size);
+    padding-bottom: var(--padding-size);
+}
+
+.footer-button-container {
+    display: flex;
+    gap: var(--tiny-gap-size);
+}
+.footer-button {
+    height: 30px;
+    width: 30px;
+    background-color: var(--title-shadow-color);
+    border: 0;
+    border-radius: var(--big-padding-size);
+}
+
+.footer-button svg {
+    fill: var(--title-font-color);
+}
+
+
 /* Modal */
 .modal-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     display: flex;
@@ -296,7 +331,7 @@ body {
     transform: scale(0.9);
 }
 
-.modal, .start-page, .game-page {
+.modal, .start-page, .game-page, .foot {
     animation: fade-in 1s ease-in-out;
 }
 

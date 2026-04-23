@@ -26,9 +26,11 @@ export const VIDEOS = {
 import victoryAudio from "../audio/victory.mp3";
 import defeatAudio from "../audio/defeat.mp3";
 import flipCardAudio from "../audio/flipcard.mp3";
+import bgAudio from "../audio/lofi.mp3"
 
 export const AUDIOS = {
     VICTORY: victoryAudio,
     DEFEAT: defeatAudio,
     FLIP: flipCardAudio,
+    BG: bgAudio
 };
