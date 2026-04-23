@@ -1,55 +1,90 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DifficultySelector from "./DifficultySelector";
 import Deck from "./Deck";
-import EndScreen from "./EndScreen";
 import Score from "./Score"
-import { SCREENS } from "../functions/Constants";
+import { SCREENS, STATE, VIDEOS, AUDIOS  } from "../functions/Constants";
 import createPokemonDeck from "../hooks/createPokemonDeck";
 import Background from "./Background";
 import Logo from "./Logo";
 import Header from "./Header";
 import Loader from "./Loading";
+import EndScreen from "./EndScreen";
+import Video from "./Video";
+import Footer from "./Footer";
 
 export default function App() {
+    // States
     const [deckSize, setDeckSize] = useState(0);
     const [bestScore, setBestScore] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const [screen, setScreen] = useState(SCREENS.DEFAULT);
     const [reloadDeck, setReloadDeck] = useState(false);
+    const [state, setState] = useState(STATE.DEFAULT);
+    const [audio, setAudio] = useState(true);
 
+    // Refs
+    const victoryAudioRef = useRef(new Audio(AUDIOS.VICTORY));
+    const defeatAudioRef = useRef(new Audio(AUDIOS.DEFEAT));
+    const flipAudioRef = useRef(new Audio(AUDIOS.FLIP));
+
+    // API call
     const { deck, loading } = createPokemonDeck(deckSize, reloadDeck);
 
+    // Game Functions
+    function handleSelectDifficulty(value) {
+        setDeckSize(value);
+        setScreen(SCREENS.PLAYING)
+        setTimeout(() => {
+            playSound(flipAudioRef);
+        }, 500)
+    }
+
+    function restartGame() {
+        handleFinalScore(currentScore);
+        setCurrentScore(0);
+        stopAllSounds();
+        setReloadDeck(prev => !prev);
+        setScreen(SCREENS.DEFAULT);
+        setState(STATE.DEFAULT);
+    }
 
     function handleOnHit() {
+        playSound(flipAudioRef);
+
         const nextValue = currentScore + 1;
         setCurrentScore(nextValue);
 
         if(nextValue == deckSize) {
-            setScreen(SCREENS.VICTORY);
+            playSound(victoryAudioRef);
+            setState(STATE.VICTORY);
         }
     }
 
     function handleFinalScore(value) {
         setBestScore(prev => value > prev ? value : prev);
-        setCurrentScore(0);
-
         if(screen != SCREENS.VICTORY) {
-            setScreen(SCREENS.DEFEAT);
+            playSound(defeatAudioRef);
+            setState(STATE.DEFEAT);
         }
         setDeckSize(deckSize);
     }
 
-    function handleSelectDifficulty(value) {
-        setDeckSize(value);
-        setScreen(SCREENS.PLAYING);
+    // Sound Functions
+    function playSound(audioRef) {
+        if (!audio) return;
+
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
     }
 
-    function restartGame() {
-        handleFinalScore(currentScore);
-        setReloadDeck(prev => !prev);
-        setScreen(SCREENS.DEFAULT);
+    function stopAllSounds() {
+        [victoryAudioRef, defeatAudioRef, flipAudioRef].forEach(ref => {
+            ref.current.pause();
+            ref.current.currentTime = 0;
+        });
     }
 
+    // App
     return (
         <>
             <Background />
@@ -78,25 +113,31 @@ export default function App() {
                         cards={deck}
                         onHit={handleOnHit}
                         onMiss={handleFinalScore}
+                        state={state}
                     />
                 </div>
             )}
 
-            {screen === SCREENS.DEFEAT && (
+            {state === STATE.VICTORY && (
                 <EndScreen
-                    message="Game Over!"
+                    message="You Win!"
                     score={currentScore}
+                    hidden={false}
+                    video=<Video src={VIDEOS.VICTORY} alt="Victory Video!"/>
                     onRestart={restartGame}
                 />
             )}
 
-            {screen === SCREENS.VICTORY && (
+            {state === STATE.DEFEAT && (
                 <EndScreen
-                    message="You Win!"
+                    message="Game Over!"
                     score={currentScore}
+                    hidden={false}
+                    video=<Video src={VIDEOS.DEFEAT} alt="Defeat Video!"/>
                     onRestart={restartGame}
                 />
             )}
+            <Footer setAudio={() => {setAudio(prev => !prev)}}/>
         </>
     );
 }
