@@ -11,6 +11,7 @@ import Loader from "./Loading";
 import EndScreen from "./EndScreen";
 import Video from "./Video";
 import Footer from "./Footer";
+import hintImg from "../assets/hint.webp";
 
 export default function App() {
     // States
@@ -28,6 +29,8 @@ export default function App() {
     const victoryAudioRef = useRef(new Audio(AUDIOS.VICTORY));
     const defeatAudioRef = useRef(new Audio(AUDIOS.DEFEAT));
     const flipAudioRef = useRef(new Audio(AUDIOS.FLIP));
+    const clickAudioRef = useRef(new Audio(AUDIOS.CLICK));
+    const confirmAudioRef = useRef(new Audio(AUDIOS.CONFIRM));
     const bgMusicRef = useRef(new Audio(AUDIOS.BG));
 
     useEffect(() => {
@@ -49,6 +52,7 @@ export default function App() {
 
     // Game Functions
     function handleSelectDifficulty(value) {
+        playSound(confirmAudioRef);
         setDeckSize(value);
         setScreen(SCREENS.PLAYING)
         setTimeout(() => {
@@ -60,6 +64,7 @@ export default function App() {
         handleFinalScore(currentScore);
         setCurrentScore(0);
         stopAllSounds();
+        playSound(confirmAudioRef);
         setReloadDeck(prev => !prev);
         setScreen(SCREENS.DEFAULT);
         setState(STATE.DEFAULT);
@@ -86,6 +91,15 @@ export default function App() {
         setDeckSize(deckSize);
     }
 
+    function handleHint() {
+        playSound(clickAudioRef);
+        setShowHint(true);
+
+        setTimeout(() => {
+            setShowHint(false);
+        }, 5000);
+    }
+
     // Sound Functions
     function playSound(audioRef) {
         if (!audio) return;
@@ -96,17 +110,19 @@ export default function App() {
     }
 
     function stopAllSounds() {
-        [victoryAudioRef, defeatAudioRef, flipAudioRef].forEach(ref => {
+        [victoryAudioRef, defeatAudioRef, confirmAudioRef, clickAudioRef, flipAudioRef].forEach(ref => {
             ref.current.pause();
             ref.current.currentTime = 0;
         });
     }
 
     function toggleAudio() {
+        playSound(clickAudioRef);
         setAudio(prev => !prev);
     }
 
     function toggleMusic() {
+        playSound(clickAudioRef);
         setMusic(prev => !prev);
     }
 
@@ -164,11 +180,29 @@ export default function App() {
                     onRestart={restartGame}
                 />
             )}
+            {showHint && (
+
+                <div className="hint-popup">
+                    <div className="hint-cards">
+                        <div className="hint-card">
+                            Don't click on the same card twice!
+                        </div>
+
+                        <div className="hint-card">
+                            Click on POKÉMON logo to go back
+                        </div>
+                    </div>
+
+                    <img src={hintImg} className="hint-hero" />
+                </div>
+            )}
             <Footer 
                 isAudioEnabled={audio}
                 isBgMusicEnabled={music}
+                showHint={handleHint}
                 setAudio={toggleAudio}
                 setMusic={toggleMusic}
+
             />
         </>
     );
