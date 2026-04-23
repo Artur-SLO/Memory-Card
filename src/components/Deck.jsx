@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Card from "./Card";
 import Shuffle from "../functions/Shuffle";
+import { STATE } from "../functions/Constants";
 
-export default function Deck({cards, onHit, onMiss}) {
+export default function Deck({cards, onHit, onMiss, state}) {
     const [clicked, setClicked] = useState(new Set());
     const [deck, setDeck] = useState(cards);
     const [flipped, setFlipped] = useState(false);
@@ -33,6 +34,7 @@ export default function Deck({cards, onHit, onMiss}) {
         onMiss(clicked.size);
     }
 
+    // Initial effect
     useEffect(() => {
         const start = setTimeout(() => {
             setFlipped(true);
@@ -62,7 +64,7 @@ export default function Deck({cards, onHit, onMiss}) {
                     name={card.name}
                     image={card.sprite}
                     onClick={handleClick}
-                    flipped={flipped}
+                    flipped={state === STATE.DEFAULT ? flipped : true}
                 />
             ))}
         </div>

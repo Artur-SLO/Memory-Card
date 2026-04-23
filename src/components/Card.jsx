@@ -1,5 +1,5 @@
-import { useTiltEffect } from "../hooks/useTiltEffect.js";
-import cardBack from "../../public/card-back.png"
+import { useTiltEffect } from '../hooks/useTiltEffect.js';
+import cardBack from '../assets/card-back.png'
 
 export default function Card({ name, image, onClick, flipped }) {
     const tilt = useTiltEffect();
