@@ -92,12 +92,14 @@ export default function App() {
     }
 
     function handleHint() {
-        playSound(clickAudioRef);
-        setShowHint(true);
+        if(showHint == false) {
+            playSound(clickAudioRef);
+            setShowHint(true);
 
-        setTimeout(() => {
-            setShowHint(false);
-        }, 5000);
+            setTimeout(() => {
+                setShowHint(false);
+            }, 5000);
+        }
     }
 
     // Sound Functions
@@ -117,8 +119,12 @@ export default function App() {
     }
 
     function toggleAudio() {
-        playSound(clickAudioRef);
         setAudio(prev => !prev);
+        if(audio === false) {
+            clickAudioRef.current.currentTime = 0;
+            clickAudioRef.current.volume = 0.3;
+            clickAudioRef.current.play();
+        }
     }
 
     function toggleMusic() {
