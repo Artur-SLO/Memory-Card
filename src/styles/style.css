@@ -22,16 +22,10 @@ body {
     background-color: var(--bg-color);
     padding-left: var(--big-padding-size);
     padding-right: var(--big-padding-size);
-    padding-bottom: var(--big-padding-size);
     color: var(--font-color);
     font-family: 'Pokemon Solid', sans-serif;
 }
 
-.app {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
 
 /* Background video */
 .background-video {
@@ -51,39 +45,18 @@ body {
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    align-content: center;
-    gap: var(--big-gap-size);
-}
-
-.start-text {
-    text-align: center;
-    font-size: 3.6rem;
-    margin-left: 40px;
-    color: var(--title-font-color);
-    letter-spacing: 4px;
-    text-shadow:
-    -5px -5px 0 var(--title-shadow-color),
-    5px -5px 0 var(--title-shadow-color),
-    -5px  5px 0 var(--title-shadow-color),
-    5px  5px 0 var(--title-shadow-color);
-}
-
-.logo-container {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    gap: var(--big-gap-size);
+    height: 80vh;
 }
 
 .logo {
-    align-self: center;
-    width: 400px;
+    width: 450px;
 }
 
 .big-logo {
-    align-self: center;
-    width: 600px;
-    margin-bottom: -70px;
+    margin-right: 40px;
+    width: 650px;
 }
 
 .difficulty-options {
@@ -133,22 +106,8 @@ body {
 .game-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
-}
-
-.game-header-text {
-    font-family: 'Pokemon Solid', sans-serif;
-    text-align: center;
-    font-size: 2.2rem;
-    margin-top: -48px;
-    margin-left: 16px;
-    color: var(--title-font-color);
-    letter-spacing: 4px;
-    text-shadow:
-    -5px -5px 0 var(--title-shadow-color),
-    5px -5px 0 var(--title-shadow-color),
-    -5px  5px 0 var(--title-shadow-color),
-    5px  5px 0 var(--title-shadow-color);
 }
 
 /* Card setup */
@@ -238,7 +197,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: var(--tiny-gap-size);
-    margin-left: auto;
 
     background-color: var(--title-shadow-color);
     height: fit-content;
@@ -267,9 +225,10 @@ body {
     display: flex;
     gap: var(--tiny-gap-size);
 }
+
 .footer-button {
-    height: 30px;
-    width: 30px;
+    height: 5vh;
+    width: 5vh;
     background-color: var(--title-shadow-color);
     border: 0;
     border-radius: var(--big-padding-size);
@@ -333,7 +292,6 @@ body {
     gap: var(--gap-size);
     width: 400px;
 
-
     background-color: var(--title-shadow-color);
     padding: var(--padding-size);
     border: 3px solid var(--title-font-color);
@@ -357,11 +315,11 @@ body {
 }
 
 /* Animations */
-.animated-button, .difficulty-button, .logo-container, .scoreboard {
+.animated-button, .difficulty-button, .logo-container, .logo, .scoreboard {
     transition: transform 0.2s ease-in-out;
 }
 
-.animated-button:hover, .difficulty-button:hover, .logo-container:hover, .scoreboard:hover{
+.animated-button:hover, .difficulty-button:hover, .logo-container:hover, .logo:hover, .scoreboard:hover{
     transform: scale(1.1);
 }
 
@@ -406,3 +364,112 @@ body {
     }
 }
 
+
+/* Media queries */
+@media (width <= 600px) {
+    body {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .logo {
+        width: 200px;
+    }
+
+    .big-logo {
+        width: 400px;
+        margin-right: 0;
+    }
+
+    .start-page {
+        margin-right: 10px;
+    }
+
+    .difficulty-options {
+        margin-left: 20px;
+
+    }
+
+    .difficulty-button {
+        font-family: 'Pokemon Solid', sans-serif;
+        font-size: 1.4rem;
+
+        color: var(--title-font-color);
+        background-color: var(--title-shadow-color);
+
+        border: 0;
+        padding: 10px;
+    }
+
+    .card-inner, .card {
+        width: 150px;
+        height: 200px;
+    }
+
+    .game-header {
+        margin-top: 5vh;
+    }
+
+    .scoreboard {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .hint-popup {
+        position: fixed;
+        bottom: 100px;
+        right: 0px;
+
+        display: flex;
+        gap: 10px;
+
+        animation: slide-in 0.4s ease, fade-out 0.4s ease 4.5s forwards;
+    }
+
+    .hint-hero {
+        width: 85px;
+        align-self: flex-end;
+        margin-top: 70px;
+
+        opacity: 0.9;
+    }
+
+    .hint-card {
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 10px;
+        border-radius: 8px;
+        background-color: var(--title-shadow-color);
+        border: 1px solid var(--title-font-color);
+        color: var(--title-font-color)
+
+    }
+
+    .footer-container {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: var(--padding-size);
+    }
+
+    .modal {
+        gap: var(--gap-size);
+        width: 280px;
+    }
+
+    .modal-button {
+        background-color: var(--title-font-color);
+        color: var(--font-color);
+    }
+
+}
+
+
+@media (width <= 400px) {
+    .logo {
+        width: 160px;
+    }
+
+    .card-inner, .card {
+        width: 130px;
+        height: 180px;
+    }
+}

@@ -140,7 +140,6 @@ export default function App() {
                 <div className="start-page">
                     <div className="logo-container">
                         <Logo sizeClass="big-logo"/>
-                        <h1 className="start-text">Memory Game</h1>
                     </div>
                     <DifficultySelector onSelectDifficulty={handleSelectDifficulty} />
                 </div>
